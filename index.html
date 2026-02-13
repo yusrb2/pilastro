@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pilastro Startpage</title>
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="pilastro-lang" onclick="toggleLang()" id="lang-btn">ID</div>
+
+        <a href="https://github.com/yusrb2" target="_blank" class="pilastro-watermark">
+            <span id="made-by">...</span>
+            <i class="ri-github-fill"></i>
+        </a>
+
+        <div class="pilastro-wrapper">
+            <div class="pilastro-brand">Pilastro Startpage</div>
+
+            <div class="pilastro-search-container">
+                <div class="pilastro-engine-btn" onclick="toggleEngine()" id="engine-icon">
+                    <i class="ri-search-2-line"></i>
+                    <div class="pilastro-tooltip" id="engine-tooltip">...</div>
+                </div>
+
+                <form id="search-form" action="https://www.bing.com/search" method="GET" target="_blank">
+                    <input type="text" name="q" id="search-input" placeholder="..." required autofocus />
+                    <button type="submit" class="pilastro-submit-btn" id="btn-search">...</button>
+                </form>
+            </div>
+
+            <div class="pilastro-grid">
+                <div class="pilastro-tile pilastro-wide pilastro-accent">
+                    <div class="tile-header">
+                        <i class="ri-heart-pulse-line"></i>
+                        <span id="date">---</span>
+                    </div>
+                    <div>
+                        <h2 id="greeting">...</h2>
+                        <p id="sub-greeting">...</p>
+                    </div>
+                </div>
+
+                <div class="pilastro-tile tile-white">
+                    <i class="ri-time-line"></i>
+                    <div id="clock">00:00</div>
+                    <div class="pilastro-tooltip" data-key="tipClock">...</div>
+                </div>
+
+                <a href="https://chatgpt.com" target="_blank" class="pilastro-tile">
+                    <i class="ri-openai-fill"></i>
+                    <span class="pilastro-label" data-key="ai">...</span>
+                    <div class="pilastro-tooltip" data-key="tipAi">...</div>
+                </a>
+
+                <div class="pilastro-tile pilastro-tall tile-white">
+                    <div class="note-header">
+                        <i class="ri-edit-2-line"></i>
+                        <span class="pilastro-label" data-key="notes">...</span>
+                    </div>
+                    <textarea class="pilastro-notes" id="notes-placeholder" placeholder="..."></textarea>
+                    <div class="pilastro-tooltip" data-key="tipNotes">...</div>
+                </div>
+
+                <a href="https://youtube.com" target="_blank" class="pilastro-tile">
+                    <i class="ri-youtube-line"></i>
+                    <span class="pilastro-label">YouTube</span>
+                    <div class="pilastro-tooltip" data-key="tipYt">...</div>
+                </a>
+                <a href="https://github.com" target="_blank" class="pilastro-tile">
+                    <i class="ri-github-line"></i>
+                    <span class="pilastro-label">GitHub</span>
+                    <div class="pilastro-tooltip" data-key="tipGh">...</div>
+                </a>
+                <a href="https://gmail.com" target="_blank" class="pilastro-tile">
+                    <i class="ri-mail-line"></i>
+                    <span class="pilastro-label">Email</span>
+                    <div class="pilastro-tooltip" data-key="tipMail">...</div>
+                </a>
+                <a href="https://open.spotify.com" target="_blank" class="pilastro-tile pilastro-wide">
+                    <i class="ri-spotify-line"></i>
+                    <span class="pilastro-label" data-key="music">...</span>
+                    <div class="pilastro-tooltip" data-key="tipMusic">...</div>
+                </a>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
