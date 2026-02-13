@@ -2,7 +2,7 @@ const i18n = {
     id: {
         search: "Mau cari apa hari ini?",
         btnSearch: "Cari",
-        subGreeting: "Semua sistem berjalan lancar.",
+        subGreeting: "Siap membantumu menjelajah internet.",
         ai: "ChatGPT",
         notes: "Catatan Cepat",
         notesPlace: "Tulis ide kamu...",
@@ -24,7 +24,7 @@ const i18n = {
     en: {
         search: "What are you looking for?",
         btnSearch: "Search",
-        subGreeting: "All systems are running smooth.",
+        subGreeting: "Ready to help you explore the web.",
         ai: "ChatGPT",
         notes: "Quick Notes",
         notesPlace: "Type your ideas...",
