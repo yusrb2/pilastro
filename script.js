@@ -101,6 +101,18 @@ function updateUI() {
     }
 }
 
+document.getElementById('search-form').addEventListener('submit', function (e) {
+    const input = document.getElementById('search-input').value.trim();
+
+    const looksLikeURL = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/.test(input);
+
+    if (looksLikeURL) {
+        e.preventDefault();
+        const url = input.startsWith('http') ? input : `https://${input}`;
+        window.open(url, '_blank');
+    }
+});
+
 const notes = document.getElementById('notes-placeholder');
 notes.value = localStorage.getItem('pilastro_data') || '';
 notes.addEventListener('input', () => localStorage.setItem('pilastro_data', notes.value));
