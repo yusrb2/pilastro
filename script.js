@@ -27,7 +27,7 @@ Pencarian Cepat:
 :b query
 :yt query
 :gh query
-:so query
+:so query ()
 :ddg query
 
 Sistem:
@@ -286,3 +286,12 @@ document.addEventListener("keydown", e => {
 
 setInterval(updateUI, 30000);
 updateUI();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then(() => console.log("SW registered"))
+      .catch(console.error);
+  });
+}
