@@ -117,5 +117,26 @@ const notes = document.getElementById('notes-placeholder');
 notes.value = localStorage.getItem('pilastro_data') || '';
 notes.addEventListener('input', () => localStorage.setItem('pilastro_data', notes.value));
 
+document.addEventListener('keydown', (e) => {
+    const searchInput = document.getElementById('search-input');
+    const notesArea = document.getElementById('notes-placeholder');
+
+    if (e.ctrlKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+    }
+
+    if (e.altKey && e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        notesArea.focus();
+    }
+
+    if (e.altKey && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        toggleLang();
+    }
+});
+
 setInterval(updateUI, 30000);
 updateUI();
