@@ -172,22 +172,31 @@ function updateUI() {
 }
 
 document.getElementById("search-form").addEventListener("submit", function (e) {
+    e.preventDefault();
     const raw = searchInput.value.trim();
+
     if (!raw) return;
 
     if (raw.startsWith(":")) {
-        e.preventDefault();
         handleCommand(raw.slice(1));
-        searchInput.value = "";
-        return;
-    }
-
-    const looksLikeURL = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/.test(raw);
-    if (looksLikeURL) {
-        e.preventDefault();
+    } else if (/^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/.test(raw)) {
         const url = raw.startsWith("http") ? raw : `https://${raw}`;
         window.open(url, "_blank");
+    } else {
+        const query = encodeURIComponent(raw);
+        const searchUrl =
+            currentEngine === "google"
+                ? `https://www.google.com/search?q=${query}`
+                : `https://www.bing.com/search?q=${query}`;
+        window.open(searchUrl, "_blank");
     }
+
+    searchInput.value = "";
+
+    if (suggestionEl) suggestionEl.style.display = "none";
+    searchContainer.classList.remove("command-mode");
+
+    searchBtn.textContent = i18n[currentLang].btnSearch;
 });
 
 function handleCommand(line) {
@@ -288,10 +297,10 @@ setInterval(updateUI, 30000);
 updateUI();
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("./sw.js")
-      .then(() => console.log("SW registered"))
-      .catch(console.error);
-  });
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("./sw.js")
+            .then(() => console.log("SW registered"))
+            .catch(console.error);
+    });
 }
