@@ -158,8 +158,8 @@ function showSuggestions(value) {
         const delBtn = document.createElement("span");
         delBtn.className = "delete-btn";
         delBtn.innerHTML = "&times;";
-        
-        delBtn.addEventListener("click", (e) => {
+
+        delBtn.addEventListener("click", e => {
             e.stopPropagation();
             removeFromHistory(item);
             showSuggestions(searchInput.value.trim());
@@ -169,7 +169,7 @@ function showSuggestions(value) {
         div.addEventListener("click", () => {
             searchInput.value = item;
             suggestionEl.style.display = "none";
-            searchInput.focus();
+            searchBtn.click();
         });
 
         div.appendChild(textSpan);
