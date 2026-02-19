@@ -375,6 +375,22 @@ notes.value = localStorage.getItem("pilastro_data") || "";
 notes.addEventListener("input", () => localStorage.setItem("pilastro_data", notes.value));
 
 document.addEventListener("keydown", e => {
+    if (e.ctrlKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+    }
+
+    if (e.altKey && e.key.toLowerCase() === "n") {
+        e.preventDefault();
+        notes.focus();
+    }
+
+    if (e.altKey && e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        toggleLang();
+    }
+
     const items = document.querySelectorAll(".suggestion-item");
 
     if (!items.length) return;
@@ -401,22 +417,6 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
         suggestionEl.style.display = "none";
         currentIndex = -1;
-    }
-
-    if (e.ctrlKey && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        searchInput.focus();
-        searchInput.select();
-    }
-
-    if (e.altKey && e.key.toLowerCase() === "n") {
-        e.preventDefault();
-        notes.focus();
-    }
-
-    if (e.altKey && e.key.toLowerCase() === "l") {
-        e.preventDefault();
-        toggleLang();
     }
 });
 
