@@ -95,9 +95,11 @@ Notes:
 
 let currentLang = localStorage.getItem("pilastro_lang") || "id";
 let currentEngine = localStorage.getItem("pilastro_engine") || "bing";
+let currentIndex = -1;
 
 const searchInput = document.getElementById("search-input");
 const searchContainer = document.querySelector(".pilastro-search-container");
+const suggestionEl = document.getElementById("suggestions");
 const searchBtn = document.getElementById("btn-search");
 
 searchInput.addEventListener("input", () => {
@@ -112,6 +114,8 @@ searchInput.addEventListener("input", () => {
         searchBtn.textContent = langData.btnSearch;
         searchInput.placeholder = langData.search;
     }
+
+    showSuggestions(searchInput.value.trim());
 });
 
 function toggleLang() {
@@ -124,6 +128,71 @@ function toggleEngine() {
     currentEngine = currentEngine === "bing" ? "google" : "bing";
     localStorage.setItem("pilastro_engine", currentEngine);
     updateUI();
+}
+
+function showSuggestions(value) {
+    const history = getHistory();
+    currentIndex = -1;
+    suggestionEl.innerHTML = "";
+
+    if (!value) {
+        suggestionEl.style.display = "none";
+        return;
+    }
+
+    const matches = history.filter(item => item.toLowerCase().startsWith(value.toLowerCase()));
+
+    if (!matches.length) {
+        suggestionEl.style.display = "none";
+        return;
+    }
+
+    matches.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "suggestion-item";
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "suggestion-text";
+        textSpan.textContent = item;
+
+        const delBtn = document.createElement("span");
+        delBtn.className = "delete-btn";
+        delBtn.innerHTML = "&times;";
+        
+        delBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            removeFromHistory(item);
+            showSuggestions(searchInput.value.trim());
+            searchInput.focus();
+        });
+
+        div.addEventListener("click", () => {
+            searchInput.value = item;
+            suggestionEl.style.display = "none";
+            searchInput.focus();
+        });
+
+        div.appendChild(textSpan);
+        div.appendChild(delBtn);
+        suggestionEl.appendChild(div);
+    });
+
+    suggestionEl.style.display = "block";
+}
+
+function saveToHistory(query) {
+    if (!query || query.startsWith(":")) return;
+
+    let history = getHistory();
+
+    history = history.filter(item => item !== query);
+    history.unshift(query);
+
+    if (history.length > MAX_HISTORY) {
+        history = history.slice(0, MAX_HISTORY);
+    }
+
+    saveHistory(history);
 }
 
 function updateUI() {
@@ -171,6 +240,17 @@ function updateUI() {
     }
 }
 
+const HISTORY_KEY = "pilastro_history";
+const MAX_HISTORY = 20;
+
+function getHistory() {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+}
+
+function saveHistory(list) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+}
+
 document.getElementById("search-form").addEventListener("submit", function (e) {
     e.preventDefault();
     const raw = searchInput.value.trim();
@@ -190,6 +270,8 @@ document.getElementById("search-form").addEventListener("submit", function (e) {
                 : `https://www.bing.com/search?q=${query}`;
         window.open(searchUrl, "_blank");
     }
+
+    saveToHistory(raw);
 
     searchInput.value = "";
 
@@ -271,11 +353,56 @@ function showHelp() {
     alert(langData.helpText);
 }
 
+function updateActive(items) {
+    items.forEach(item => item.classList.remove("active"));
+
+    const selectedItem = items[currentIndex];
+    selectedItem.classList.add("active");
+
+    const textOnly = selectedItem.querySelector(".suggestion-text").textContent;
+
+    searchInput.value = textOnly;
+}
+
+function removeFromHistory(itemToRemove) {
+    let history = getHistory();
+    history = history.filter(item => item !== itemToRemove);
+    saveHistory(history);
+}
+
 const notes = document.getElementById("notes-placeholder");
 notes.value = localStorage.getItem("pilastro_data") || "";
 notes.addEventListener("input", () => localStorage.setItem("pilastro_data", notes.value));
 
 document.addEventListener("keydown", e => {
+    const items = document.querySelectorAll(".suggestion-item");
+
+    if (!items.length) return;
+
+    if (e.key === "ArrowDown") {
+        e.preventDefault();
+        currentIndex++;
+        if (currentIndex >= items.length) currentIndex = 0;
+        updateActive(items);
+    }
+
+    if (e.key === "ArrowUp") {
+        e.preventDefault();
+        currentIndex--;
+        if (currentIndex < 0) currentIndex = items.length - 1;
+        updateActive(items);
+    }
+
+    if (e.key === "Enter" && currentIndex >= 0) {
+        e.preventDefault();
+        items[currentIndex].click();
+    }
+
+    if (e.key === "Escape") {
+        suggestionEl.style.display = "none";
+        currentIndex = -1;
+    }
+
     if (e.ctrlKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
         searchInput.focus();
